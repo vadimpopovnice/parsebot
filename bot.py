@@ -1,12 +1,7 @@
-import random
-from selenium import webdriver
 import config
 import telebot
 from telebot import types, TeleBot
 import json
-import requests
-from time import sleep
-import time
 
 
 bot: TeleBot = telebot.TeleBot(config.token)
@@ -247,22 +242,32 @@ jsonData1 = json.dumps(dictData1)
 dictData1 = json.loads(jsonData1)
 
 
-
-@bot.message_handler(commands=['search_user'])
-def search_user(message):
-    name = 'Ervin Howell'
-    results = f'Эмейл: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['email'] + \
-              f'\nТелефон: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['phone']
-    bot.send_message(message.chat.id, results)
-
-
 @bot.message_handler(commands=['search'])
 def search(message):
     ABC = bot.send_message(message.chat.id, 'Введите имя для поиска.')
     bot.register_next_step_handler(ABC, users)
 
+# узнать как искать по значению ключа
 
 def users(message):
+    keyn123 = message.text
+    flanalogue = []
+    name = keyn123
+    search_resultat = f'\nИмя: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['name'] + \
+                  f'\nЛогин: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['username'] + \
+                  f'\nТелефон: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['phone'] + \
+                  f'\nСайт: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['website'] + \
+                  f'\nНазвание комании: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['company']['name']
+    for keyn123 in dictData1:
+        if keyn123 in dictData1:
+            bot.send_message(message.chat.id, search_resultat)
+            bot.send_location(message.chat.id,
+                              latitude=list(filter(lambda x: x['name'] == name, dictData1))[0]['address']["geo"]["lat"],
+                              longitude=list(filter(lambda x: x['name'] == name, dictData1))[0]["address"]["geo"][
+                                  "lng"])
+            flanalogue.append(keyn123)
+
+def users1(message):
     user01 = 'leanne graham'
     anuspsa = message.text.lower()
     if anuspsa in user01:
@@ -273,70 +278,12 @@ def users(message):
                   f'\nСайт: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['website'] + \
                   f'\nНазвание комании: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['company']['name']
         bot.send_message(message.chat.id, results)
-        bot.send_location(message.chat.id, latitude=list(filter(lambda x: x['name'] == name, dictData1))[0]['address']["geo"]["lat"],
-                          longitude=list(filter(lambda x: x['name'] == name, dictData1))[0]["address"]["geo"]["lng"])
-    user02 = 'clementine bauch'
-    substring = message.text.lower()
-    if substring in user02:
-        name = 'Clementine Bauch'
-        results = f'\nИмя: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['name'] + \
-                  f'\nЛогин: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['username'] + \
-                  f'\nТелефон: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['phone'] + \
-                  f'\nСайт: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['website'] + \
-                  f'\nНазвание комании: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['company']['name']
-        bot.send_message(message.chat.id, results)
-        bot.send_location(message.chat.id,
-                          latitude=list(filter(lambda x: x['name'] == name, dictData1))[0]['address']["geo"]["lat"],
-                          longitude=list(filter(lambda x: x['name'] == name, dictData1))[0]["address"]["geo"]["lng"])
-    user03 = 'ervin howell'
-    substring = message.text.lower()
-    if substring in user03:
-        name = 'Ervin Howell'
-        results = f'\nИмя: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['name'] + \
-                  f'\nЛогин: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['username'] + \
-                  f'\nТелефон: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['phone'] + \
-                  f'\nСайт: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['website'] + \
-                  f'\nНазвание комании: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['company']['name']
-        bot.send_message(message.chat.id, results)
         bot.send_location(message.chat.id,
                           latitude=list(filter(lambda x: x['name'] == name, dictData1))[0]['address']["geo"]["lat"],
                           longitude=list(filter(lambda x: x['name'] == name, dictData1))[0]["address"]["geo"]["lng"])
 
-    else:
-        bot.send_message(message.chat.id, 'Продолжить поиск.\n/search')
 
 
-@bot.message_handler(commands=['help'])
-def help(message):
-    bot.send_message(message.chat.id, f'Кинуть "кубики":\n'
-                                      f'👉🏻/dice\n'
-                                      f'Поиск видео YouTube:\n'
-                                      f'👉🏻/search_videos\n'
-                                      f'На мороженное:\n'
-                                      f'👉🏻/donate\n'
-                                      f'Послушать Славу Марлоу:\n'
-                                      f'👉🏻/slava_marlou\n'
-                                      f'Где автор?:\n'
-                                      f'👉🏻/maps\n'
-                                      f'Тест запроса JSON:\n'
-                                      f'👉🏻/latlng\n'
-                                      f'Тест запроса JSON:\n'
-                                      f'👉🏻/latlng1\n')
-
-
-@bot.message_handler(commands=['maps'])
-def maps(message):
-    bot.send_message(message.chat.id, 'Тут живёт автор бота!')
-    bot.send_chat_action(message.from_user.id, 'find_location')
-    bot.send_location(message.from_user.id, latitude=49.931578, longitude=36.429822)
-
-
-@bot.message_handler(commands=["start"])
-def start(message):
-    bot.send_message(message.chat.id, f'Привет, {message.from_user.first_name}.👽\n'
-                                      f'Я сейчас нахожусь на стадии разработки, так что список комманд и '
-                                      f'взаимодействий будет регулярно пополняться. :)\n'
-                                      f'👉🏻/help\n')
 
 
 bot.polling(none_stop=True)
