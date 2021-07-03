@@ -247,40 +247,27 @@ def search(message):
     ABC = bot.send_message(message.chat.id, 'Введите имя для поиска.')
     bot.register_next_step_handler(ABC, users)
 
-# узнать как искать по значению ключа
+# узнать как искать по значению ключа +
+# отдельно пилить логику? ?
 
 def users(message):
-    keyn123 = message.text
+    keyn123 = message.text # не понял для чего тогда параметр name
     flanalogue = []
-    name = keyn123
-    search_resultat = f'\nИмя: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['name'] + \
-                  f'\nЛогин: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['username'] + \
-                  f'\nТелефон: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['phone'] + \
-                  f'\nСайт: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['website'] + \
-                  f'\nНазвание комании: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['company']['name']
+    name = keyn123 # для чего ты?
+    search_resultat = f'\nИмя: ' + list(filter(lambda x: x['name'] == keyn123, dictData1))[0]['name'] + \
+                  f'\nЛогин: ' + list(filter(lambda x: x['name'] == keyn123, dictData1))[0]['username'] + \
+                  f'\nТелефон: ' + list(filter(lambda x: x['name'] == keyn123, dictData1))[0]['phone'] + \
+                  f'\nСайт: ' + list(filter(lambda x: x['name'] == keyn123, dictData1))[0]['website'] + \
+                  f'\nНазвание комании: ' + list(filter(lambda x: x['name'] == keyn123, dictData1))[0]['company']['name']
     for keyn123 in dictData1:
         if keyn123 in dictData1:
-            bot.send_message(message.chat.id, search_resultat)
+            bot.send_message(message.chat.id, search_resultat) # всё работает и с keyn123, кроме локации, она работает только через name, WTF?
             bot.send_location(message.chat.id,
-                              latitude=list(filter(lambda x: x['name'] == name, dictData1))[0]['address']["geo"]["lat"],
-                              longitude=list(filter(lambda x: x['name'] == name, dictData1))[0]["address"]["geo"][
+                              latitude=list(filter(lambda x: x['name'] == keyn123, dictData1))[0]['address']["geo"]["lat"],
+                              longitude=list(filter(lambda x: x['name'] == keyn123, dictData1))[0]["address"]["geo"][
                                   "lng"])
             flanalogue.append(keyn123)
 
-def users1(message):
-    user01 = 'leanne graham'
-    anuspsa = message.text.lower()
-    if anuspsa in user01:
-        name = 'Leanne Graham'
-        results = f'\nИмя: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['name'] + \
-                  f'\nЛогин: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['username'] + \
-                  f'\nТелефон: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['phone'] + \
-                  f'\nСайт: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['website'] + \
-                  f'\nНазвание комании: ' + list(filter(lambda x: x['name'] == name, dictData1))[0]['company']['name']
-        bot.send_message(message.chat.id, results)
-        bot.send_location(message.chat.id,
-                          latitude=list(filter(lambda x: x['name'] == name, dictData1))[0]['address']["geo"]["lat"],
-                          longitude=list(filter(lambda x: x['name'] == name, dictData1))[0]["address"]["geo"]["lng"])
 
 
 
